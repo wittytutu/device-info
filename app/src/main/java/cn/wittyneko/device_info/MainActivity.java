@@ -1,8 +1,13 @@
 package cn.wittyneko.device_info;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
@@ -11,10 +16,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getDeviceInfo();
     }
 
     private void getDeviceInfo() {
+
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        log("telephone", telephonyManager.getDeviceId());
+        log("telephone", telephonyManager.getDeviceSoftwareVersion());
+        @SuppressLint("WifiManagerLeak") WifiManager wifiManager= (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        log("wifi", wifiManager.getConnectionInfo().getMacAddress());
+
+        log("android_id", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+
+        log("SERIAL ", Build.SERIAL );
+
         log("ID", Build.ID);
         log("DISPLAY", Build.DISPLAY);
         log("PRODUCT", Build.PRODUCT);
@@ -37,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
         }
         log("INCREMENTAL", Build.VERSION.INCREMENTAL );
         log("RELEASE", Build.VERSION.RELEASE);
-        log("BASE_OS ", Build.VERSION.BASE_OS );
-        log("SECURITY_PATCH ", Build.VERSION.SECURITY_PATCH );
-        log("SDK ", Build.VERSION.SDK );
+        //log("BASE_OS ", Build.VERSION.BASE_OS );
+        //log("SECURITY_PATCH ", Build.VERSION.SECURITY_PATCH );
+        //log("SDK ", Build.VERSION.SDK );
         log("SDK_INT ", Build.VERSION.SDK_INT  + "");
-        log("PREVIEW_SDK_INT ", Build.VERSION.PREVIEW_SDK_INT  + "");
+        //log("PREVIEW_SDK_INT ", Build.VERSION.PREVIEW_SDK_INT  + "");
         log("CODENAME", Build.VERSION.CODENAME);
         //log("CODENAME", Build.VERSION.ALL_CODENAMES);
         //log("ACTIVE_CODENAMES ", Build.VERSION.ACTIVE_CODENAMES );
